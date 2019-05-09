@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="file" id="fileInput">
+<button onclick="upload()">Upload</button>
+<hr>
+<button onclick="getAll()">All Documents</button>
+<hr>
+<input type="number" id="idDownload">
+<button onclick="download()">Download</button>
+<script>
+    function upload() {
+        var fileInput = document.getElementById('fileInput');
+
+        var formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+        var client = new XMLHttpRequest();
+        client.open("POST", "http://localhost:8081/upload/file");
+        client.send(formData);
+        client.onreadystatechange = function (ev) {
+            if (client.readyState === XMLHttpRequest.DONE) {
+                console.log(client.response);
+            }
+        }
+    }
+
+    function getAll() {
+        var client = new XMLHttpRequest();
+        client.open("GET", "http://localhost:8081/upload/getAllFileNames");
+        client.setRequestHeader('Content-Type', 'application/json');
+        client.setRequestHeader('Accept', 'application/json');
+        client.send();
+        client.onreadystatechange = function () {
+            if (client.readyState === XMLHttpRequest.DONE) {
+                var response = JSON.parse(client.response);
+                for (var i =0; i<response.length; i++) {
+                    var elem = response[i];
+                    console.log(elem);
+                }
+            }
+        }
+    }
+
+    function download() {
+        var id = document.getElementById('idDownload').value;
+        window.location.replace("http://localhost:8081/upload/d?id="+id)
+    }
+    // http://websystique.com/springmvc/spring-mvc-4-fileupload-download-hibernate-example/
+</script>
+</body>
+</html>
