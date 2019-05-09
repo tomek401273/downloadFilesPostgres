@@ -14,7 +14,8 @@ import javax.persistence.*;
 public class UserDocument {
 
 	@Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column(name = "id")
+    @GeneratedValue(strategy= GenerationType.SEQUENCE)
 	private Integer id;
 
 	@Column(name="name")
@@ -28,3 +29,4 @@ public class UserDocument {
 	@Column(name="content", nullable=false)
 	private byte[] content;
 }
+//	create table USER_DOCUMENT (id SERIAL, content BYTEA not null, name varchar(255), type varchar(255), primary key (id))

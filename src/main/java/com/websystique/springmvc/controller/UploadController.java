@@ -4,6 +4,7 @@ import com.websystique.springmvc.model.DocumentDto;
 import com.websystique.springmvc.model.UserDocument;
 import com.websystique.springmvc.model.UserDocumentDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,8 @@ public class UploadController {
     @RequestMapping(value = "/file", method = RequestMethod.POST)
     public String uploadFile(@RequestParam("file")MultipartFile multipartFile, RedirectAttributes redirectAttributes) throws Exception {
         System.out.println(multipartFile.getOriginalFilename());
+//        Integer id = Math.toIntExact(userDocumentDao.count())+1;
+//        userDocument.setId(id);
         UserDocument userDocument = new UserDocument();
         userDocument.setName(multipartFile.getOriginalFilename());
         userDocument.setType(multipartFile.getContentType());
@@ -38,6 +41,7 @@ public class UploadController {
     }
 
     @RequestMapping(value = { "/d" }, method = RequestMethod.GET)
+    @Transactional
     public void downloadDocument(@RequestParam Integer id, HttpServletResponse response) throws IOException {
 
 
