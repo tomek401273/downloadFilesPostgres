@@ -4,6 +4,10 @@ import com.websystique.springmvc.model.DocumentDto;
 import com.websystique.springmvc.model.UserDocument;
 import com.websystique.springmvc.model.UserDocumentDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
@@ -63,5 +67,22 @@ public class UploadController {
             documentDtos.add(new DocumentDto(d.getId(), d.getName()));
         }
         return documentDtos;
+    }
+
+
+    @RequestMapping(value="/getpdf1", method=RequestMethod.GET)
+    public ResponseEntity<byte[]> getPDF1() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType("application/pdf"));
+        headers.add("Content-Disposition", "inline; filename=" + "example.pdf");
+        String filename = "pdf1.pdf";
+
+
+        List<UserDocument> userDocuments = userDocumentDao.findAll();
+//        for downloading
+//        headers.setContentDispositionFormData(filename, filename);
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+        ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(userDocuments.get(0).getContent(), headers, HttpStatus.OK);
+        return response;
     }
 }

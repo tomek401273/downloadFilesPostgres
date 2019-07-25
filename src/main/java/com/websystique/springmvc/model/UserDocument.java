@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name="USER_DOCUMENT")
+@Table(schema = "sandbox_tgrajkowski", name = "user_document")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,7 +15,8 @@ public class UserDocument {
 
 	@Id
 	@Column(name = "id")
-    @GeneratedValue(strategy= GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "user_document_seq", sequenceName = "user_document_sequence")
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "user_document_seq")
 	private Integer id;
 
 	@Column(name="name")
